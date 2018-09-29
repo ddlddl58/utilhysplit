@@ -80,18 +80,23 @@ class SEmissions(object):
         self.stackhash = cems_mod.get_stack_dict(cems_mod.read_stack_height(), orispl=self.ehash.keys())
 
         #key is the orispl_code and value is (latitude, longitude)
-        print('List of emissions sources found\n', self.ehash)
-        print('----------------')
+        #print('List of emissions sources found\n', self.ehash)
+        #print('----------------')
         namehash = self.cems.create_name_dictionary()
         self.meanhash={}    
         ##This gets a pivot table with rows time.
         ##columns are (orisp, unit_id) or just (orisp)
         data1 = self.cems.cemspivot(('so2_lbs'), daterange=[self.d1, self.d2],
                 verbose=True, unitid=byunit)
-        print('done with pivot----------------')
-        print(self.ehash)
-        
+        #print('done with pivot----------------')
+        #print(self.ehash)
+       
+        #columns=['ORIS','Name','latlon','Mean (kg)','Max (kg)','Stack']
+        columns=['ORIS','Name', 'lat','lon', 'Mean(kg)', 'Max(kg)', \
+                 'Stack (id=ht(m)']
+        slist = []
         for oris in self.ehash.keys():
+            sublist = []
             print('----------------')
             try:
                 #data = data1[loc].sum(axis=1)
@@ -99,7 +104,17 @@ class SEmissions(object):
             except: 
                 data = pd.Series()
             qmean = data.mean(axis=0)
-            qmax = data.max(axis=0)
+            qmax = data.max(axis=0) 
+            sublist.append(oris) 
+            sublist.append(namehash[oris])
+            sublist.append(self.ehash[oris][0])  #latlon tuple
+            sublist.append(self.ehash[oris][1])  #latlon tuple
+            sublist.append(int(qmean*0.453592)) #mean emission (kg)
+            sublist.append(int(qmax*0.453592))  #max emission (kg)
+            #slist['latlon'] =  self.ehash[oris]    #latlon tuple
+            #slist['Mean (kg)'] = qmean*0.453592 #mean emission (kg)
+            #slist['Max (kg)'] = qmax*0.453592  #max emission (kg)
+            #slist['Stack'] = self.stackhash[oris]  #max emission (kg)
             print(namehash[oris])
             print('ORISPL ' + str(oris))
             print(self.ehash[oris])
@@ -110,9 +125,22 @@ class SEmissions(object):
             print('Mean emission (lbs)', qmean)
             print('Maximum emission (lbs)', qmax)
             print('Stack id, Stack height (meters)')
+            rstr=''
             for val in self.stackhash[oris]:
-                print(str(val[0]) + ',    ' + str(val[1]*0.3048))
+                rstr += str(val[0]) + ' = ' + str(int(val[1]*0.3048)) + ', '
+                print(str(val[0]) + ',    ' + str(int(val[1]*0.3048)))
+            sublist.append(rstr)
+            slist.append(sublist)
+        self.sumdf = pd.DataFrame(slist, columns=columns)
+        print(self.sumdf[0:2])
 
+    def print_source_summary(self, tdir, name='source_summary.csv'):
+        #from tabulate import tabulate
+        #content = tabulate(self.sumdf.tolist(), list(self.sumdf.columns),
+        #                   tablefmt="plain")
+        fname = tdir + name
+        #open(fname, "w").write(content)
+        self.sumdf.to_csv(fname) 
 
     def get_so2(self):
         sources = self.get_sources(stype='so2_lbs') 
@@ -135,7 +163,7 @@ class SEmissions(object):
 
         self.ehash is constructed in find. 
         """
-        print("GET SOURCES")
+        #print("GET SOURCES")
         if self.cems.df.empty: self.find()
         sources = self.cems.cemspivot((stype), daterange=[self.d1, self.d2],
                   verbose=False, unitid=False)
@@ -153,7 +181,9 @@ class SEmissions(object):
         #print(sources[0:20])
         return sources
 
-    def new_create_emittimes(self, edate, schunks=-99, tdir='./'):
+
+
+    def create_emittimes(self, edate, schunks=1000, tdir='./'):
         """
         create emittimes file for CEMS emissions.
         edate is the date to start the file on.
@@ -163,31 +193,34 @@ class SEmissions(object):
         dfheat = self.get_heat()
         locs=df.columns.values
         done = False
+        iii=0
+        d1 = edate
         while not done:
-            d1 = edate
-            d2 = edate + datetime.timedelta(hours=schunks)
+            d2 = d1 + datetime.timedelta(hours=schunks-1)
             dftemp = df.loc[d1:d2]
             hdf = dfheat[d1:d2]
             if dftemp.empty: 
                break
-            self.emit_subroutine(dftemp, hdf, tdir)       
-            d1 = d2
-
-
+            self.emit_subroutine(dftemp, hdf, d1, schunks, tdir)       
+            d1 = d2 + datetime.timedelta(hours=1)
+            iii+=1
+            if iii > 1000: done=True
+            if d1 > self.d2: done=True 
+       
     #def emit_subroutine(self, df, dfheat):
 
 
-    def create_emittimes(self, edate, schunks=-99, tdir='./'):
+    def emit_subroutine(self, df, dfheat,edate, schunks, tdir='./'):
         """
         create emittimes file for CEMS emissions.
         edate is the date to start the file on.
         Currently, 24 hour cycles are hard-wired.
         """
-        df = self.get_so2()
-        dfheat = self.get_heat()
+        #df = self.get_so2()
+        #dfheat = self.get_heat()
         locs=df.columns.values
         for hdr in locs:
-            print('HEADER', hdr)
+            #print('HEADER', hdr)
             d1 = edate  #date to start emittimes file.
             dftemp = df[hdr]
             dfh = dfheat[hdr]
@@ -199,6 +232,9 @@ class SEmissions(object):
             ##hardwire 1 hr duraton of emissions.
             record_duration='0100'
             area=1
+            ##output directory is determined by tdir and starting date.
+            ##chkdir=True means date2dir will create the directory if
+            ##it does not exist already.
             odir =  date2dir(tdir, edate, dhour=schunks, chkdir=True)
             ename = odir + 'EMIT' + str(oris) + '.txt'
             efile = emittimes.EmitTimes(filename=ename)

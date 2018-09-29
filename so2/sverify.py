@@ -42,6 +42,14 @@ A. Preliminary.
 4. Create plots of emissions vs. time
 5. Create plots of measurements vs. time
 
+Method A
+1. Find measurement stations with peaks above a certain level
+2. Backward trajctories from peaks?
+METHOD B
+OR just use geometry - every plant within 100 km as a contributer
+1. 
+2. 
+
 B.1 trajectory runs
 
 B.2 Dispersion runs 
@@ -100,9 +108,11 @@ parser.add_option('-d', type="string", dest="drange", \
                   default="2106:1:1:2016:2:1", \
                   help='daterange YYYY:M:D:YYYY:M:D')
 parser.add_option('--cems', action="store_true", dest="cems", default=False)
-parser.add_option('--obs', action="store_true", dest="obs", default=False)
 parser.add_option('-o', type="string", dest="tdir", default="./", \
                   help='directory path')
+parser.add_option('--obs', action="store_true", dest="obs", default=False)
+parser.add_option('-y', type="string", dest="hysplit", default=None)
+
 ##-----##
 parser.add_option('--run', action="store_true", dest="runh", default=False)
 parser.add_option('--map', action="store_true", dest="emap", default=False)
@@ -154,15 +164,32 @@ source_chunks = 24*days
 
 ##run_duration specifies how long each run lasts.
 ##the last emissions will occur after the time specified in
-##source_chunks, however, the run will need to extend beyond this time.
+##source_chunks, 
+##METHOD A
+##The run ends at the end of the emittimes file. However,
+##a pardump file is generated which is used to initialize the next run.
+##
+run_duration = 24*(days) + 2
+run_duration = source_chunks  
+datemchunks = source_chunks
+ncycle = source_chunks
+
+##METHOD B
+##The run will need to extend beyond this time.
 ##the amount of observation data in the datem file should match the run time.
-run_duration = 24*(days+2)
-datemchunks = run_duration
+#run_duration = 24*(days+2)
+#datemchunks = run_duration
 
 ##mkdir is a generator
-mkdir = dirtree(options.tdir, d1, d2,  dhour = 24*days)
-for sdir in mkdir:
-    print(sdir)
+#mkdir = dirtree(options.tdir, d1, d2,  dhour = 24*days)
+#for sdir in mkdir:
+#    print(sdir)
+
+if options.hysplit == 'defaults':
+   from shysplit import default_setup
+   from shysplit import default_control
+   default_setup('SETUP.0', options.tdir)
+   default_control('CONTROL.0', options.tdir, run_duration, d1)
 
 
 rfignum=1
@@ -170,11 +197,12 @@ if options.cems:
     from semissions import SEmissions
     ef = SEmissions([d1,d2], area, state)
     ef.find()
+    ef.print_source_summary(options.tdir)
     ef.plot()
     ef.create_emittimes(ef.d1, schunks=source_chunks, tdir=options.tdir)
     rfignum = ef.fignum 
     if not options.obs:
-        mapfig = plt.figure(fignum)
+        mapfig = plt.figure(rfignum)
         axmap = create_map(rfignum)
         ef.map(axmap)
         plt.show()
@@ -183,8 +211,8 @@ if options.obs:
     from sobs import SObs
     obs = SObs([d1,d2], area, state)
     obs.fignum=rfignum
-    obs.find(pload=opkl)
-    obs.obs2datem() 
+    obs.find(pload=opkl, tdir=options.tdir)
+    obs.obs2datem(d1, ochunks=(source_chunks, run_duration), tdir=options.tdir) 
     obs.plot()
     fignum = obs.fignum 
     axmap = create_map(fignum)

@@ -59,6 +59,8 @@ class SObs(object):
         #area to consider
         self.area = area
         self.pfile = './' + 'obs' + self.d1.strftime("%Y%m%d.") + self.d2.strftime("%Y%m%d.") + 'pkl'
+        self.csvfile =  'obs' + self.d1.strftime("%Y%m%d.") + \
+                        self.d2.strftime("%Y%m%d.") + 'csv'
 
         self.metdir = '/pub/archives/wrf27km/'
         self.hdir = '/n-home/alicec/Ahysplit/trunk/exec/'
@@ -107,17 +109,34 @@ class SObs(object):
         #sns.distplot(np.array(dist)/2.6178, kde=False, norm_hist=True, hist_kws={'log':False, 'cumulative':True})
         #plt.show()
  
-    def save(self):
-        pickle.dump(self.obs, open(self.pfile, "wb"))
+    def save(self,tdir='./', name='obs.csv' ):
+        fname = tdir + name
+        self.obs.to_csv(fname)
 
-    def find(self, verbose=False, pload=True, getairnow=False):
+    def read_csv(self, name):
+        print('in subroutine read_csv', name)
+        to_datetime = lambda d: datetime.datetime.strptime(d, '%Y-%m-%d %H:%M:%S')
+        obs = pd.read_csv(name, sep=',', 
+                          converters={'time': to_datetime})
+        return obs 
+ 
+    def create_pickle(self, tdir='./' ):
+        pickle.dump(self.obs, open(tdir + self.pfile, "wb"))
+
+    def find(self, verbose=False, pload=True, getairnow=False, tdir='./'):
         """
         """
+        make_pickle=False  #to create/load from a pickle file set to TRUE
+        make_csv = True    #to create/load from a csv file set to TRUE
         if pload:
            try:
             print('trying to load file')
-            print(self.pfile)
-            self.obs = pickle.load(open(self.pfile,"rb"))
+            if make_pickle: 
+               print(self.pfile)
+               self.obs = pickle.load(open(tdir + self.pfile,"rb"))
+            if make_csv: 
+               print(self.csvfile)
+               self.obs = self.read_csv(tdir + self.csvfile)
            except:
             pload=False
             print('Failed to load')
@@ -152,15 +171,45 @@ class SObs(object):
             #    plt.show()
         if verbose: obs_util.summarize(self.obs)   
         self.ohash = obs_util.get_lhash(self.obs, 'siteid')
-        if not pload: self.save()          
+        if not pload: 
+           if make_csv: self.save(tdir, self.csvfile)          
+           if make_pickle: self.create_pickle(tdir)          
         #self.obs.writecsv()
 
     def mkpkl(self):
         tdir = self.tdir + 'run' + str(self.rnum) + '/'
         mk_datem_pkl(self.rnum, self.d1, self.d2, tdir)
 
+    def obs2datem(self, edate, ochunks=(1000,1000), tdir='./'):
+        """
+        edate: datetime object
+        ochunks: tuple (integer, integer) 
+                 Each represents hours
+            
+        tdir: string
+              top level directory for output.
+        """
+        d1 = edate
+        done =False
+        iii=0
+        maxiii=1000
+        oe = ochunks[1] 
+        oc = ochunks[0]
+        while not done:
+              d2 = d1 + datetime.timedelta(hours = oc-1)
+              d3 = d1 + datetime.timedelta(hours = oe)
+              odir = date2dir(tdir, d1, dhour=oc, chkdir=True)
+              dname = odir+'datem.txt'
+              obs_util.write_datem(self.obs, sitename='siteid', drange=[d1,d3],\
+                                   dname=dname)  
+              d1 = d2 + datetime.timedelta(hours=1)
+              iii+=1
+              if d1 > self.d2: done=True 
+              if iii > maxiii: 
+                 done=True
+                 print('WARNING: obs2datem, loop exceeded maxiii')
 
-    def obs2datem(self):
+    def old_obs2datem(self):
         """
         write datemfile.txt. observations in datem format
         """

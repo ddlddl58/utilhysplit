@@ -36,7 +36,7 @@ class EmitTimes(object):
 
    def write_new(self, filename):
        maxrec = self.findmaxrec()
-       with open(filename, 'a') as fid:
+       with open(filename, 'w') as fid:
            fid.write(self.header_str())
        for ecycle in self.cycle_list:
            for iii in range(0, maxrec - ecycle.nrecs):

@@ -321,6 +321,10 @@ class Species():
         returnval +=  self.datestr  + note  +'\n'
         return returnval
 
+
+    def add_wetdep(self, wstr):
+       self.wetdepstr = wstr
+
     def strdep(self, annotate=True):
         """Prints out five lines which define deposition and gravitational settling for species/pollutant in HYSPLIT control file"""
         note = ''
@@ -431,7 +435,14 @@ class NameList():
             if order ==[]:
                order = list(self.nlist.keys())
             for key in order:
-                fid.write(key + '=' + self.nlist[key] + ',\n')
+                kstr = True
+                try:
+                    fid.write(key + '=' + self.nlist[key] + ',\n')
+                except:
+                    print('WARNING: ' + str(key) + ' ' + \
+                          str(self.nlist[key]) + ' not str')
+                    kstr=False
+                if not kstr: fid.write(str(key) + '=' + str(self.nlist[key]) + ',\n')
             fid.write('/ \n')
 #    def describe(self):
 
