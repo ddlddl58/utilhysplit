@@ -13,12 +13,14 @@ import datetime
 
 class EmitTimes(object):
 
-   def __init__(self, filename='EMITIMES.txt'):
+   def __init__(self, filename='EMITIMES.txt', nanvalue=None):
        self.filename=filename
        self.cycle_list = []  #list of EmitCycle objects.
        self.ncycles = 0
        self.chash = {}
        self.sdatelist =[] 
+       self.nanvalue = nanvalue  #if NaN shows up, what value to use.
+                                 #if None, will throw and error if there a Nan
 
    def header_str(self):
       returnval =  'YYYY MM DD HH    DURATION(hhhh) #RECORDS \n'
@@ -43,18 +45,22 @@ class EmitTimes(object):
               ecycle.add_dummy_record()
            ecycle.write_new(filename)
 
-   def read_file(self):
+   def read_file(self, verbose=False):
        with open(self.filename, 'r') as fid:
-            fid.readline()
+            lines = fid.readlines()
             done=False
-            while not done:
+            iii=2
+            while iii < len(lines):
+               if verbose: print('NEW CYCLE')
                ec = EmitCycle()
-               check = ec.read_cycle(fid)
+               nrecs = ec.parse_header(lines[iii]) 
+               check = ec.read_cycle(lines[iii+1: iii+nrecs+1])
                if not check: 
                   done=True
                else:
                   self.cycle_list.append(ec)
                   self.ncycles += 1
+               iii += nrecs + 1
 
    def add_cycle(self, sdate, duration):
         self.ncycles +=1 
@@ -72,7 +78,7 @@ class EmitTimes(object):
 
  
    def add_record(self, date, duration, lat, lon,
-                   height, rate, area, heat):
+                   height, rate, area, heat, nanvalue=0):
         """
         adds a record to a cycle based on the date of the record.
         """
@@ -86,7 +92,8 @@ class EmitTimes(object):
             rvalue = False
         else:
             self.cycle_list[cycle_number].add_record(date, duration, lat, lon,
-                                                 height, rate, area, heat)
+                                                 height, rate, area, heat,
+                                                 nanvalue)
             rvalue = True 
         return rvalue 
 
@@ -171,7 +178,8 @@ class EmitCycle(object):
        self.dummy_recordra.append(eline)
        self.drecs +=1
 
-   def add_record(self, sdate, duration, lat, lon, ht, rate, area, heat):
+   def add_record(self, sdate, duration, lat, lon, ht, rate, area, heat,
+                  nanvalue=0):
        """Inputs
        sdate
        duration
@@ -182,25 +190,32 @@ class EmitCycle(object):
        area
        heat
        """
-       eline = EmitLine(sdate, duration, lat, lon, ht, rate, area, heat)
+       eline = EmitLine(sdate, duration, lat, lon, ht, rate, area, heat,
+               nanvalue)
        self.recordra.append(eline)
        self.nrecs +=1
 
-   def read_cycle(self, fid):
+   def read_cycle_header(self, header, verbose=False):
+       nrecs =  self.parse_header(header)
+       if verbose: print('HEADER', header)
+       return nrecs
+
+   def read_cycle(self, lines, verbose=False):
        check=True
        recordra=[]
-       header = fid.readline()
-       if not header: 
-         check=False
-       else:
-           try:
-              nrecs =  self.parse_header(header)
-           except: 
-              return False
-           for line in range(0,nrecs):
-               temp = fid.readline()
-               recordra.append(self.parse_record(temp))
-           self.recordra.extend(recordra)
+       #header = fid.readline()
+       #if verbose: print('HEADER', header, str(self.nrecs))
+       #if not header: 
+       #  check=False
+       #else:
+       #    try:
+       #       nrecs =  self.parse_header(header)
+       #    except: 
+       #       return False
+       for temp in lines:
+           if verbose: print('Line', temp)
+           recordra.append(self.parse_record(temp))
+       self.recordra.extend(recordra)
        return check
 
 
@@ -222,19 +237,43 @@ class EmitCycle(object):
            self.nrecs -= 1
 
 
+    
+
 class EmitLine(object):
    """
 
    """
-   def __init__(self, date, duration, lat, lon, height, rate, area=0, heat=0):
+   def __init__(self, date, duration, lat, lon, height, rate, area=0, heat=0,
+                nanvalue=0):
        self.date = date
        self.duration = duration
        self.lat = lat
        self.lon = lon
-       self.height=height
+       self.height= height
        self.rate = rate
        self.area = area
        self.heat = heat
+       self.message=''
+       nanpresent = self.checknan(nanvalue)
+       if nanpresent: print('WARNING: EmitFile NaNs present. \
+          Being changed to ' + str(nanvalue) + self.message)
+
+   def checknan(self, nanvalue):
+       nanpresent = False
+       if np.isnan(self.area):
+          self.area = nanvalue
+          nanpresent=True
+          self.message += 'area is Nan \n'
+       if np.isnan(self.rate):
+          self.rate = nanvalue      
+          nanpresent=True
+          self.message += 'rate is Nan \n'
+       if np.isnan(self.heat):
+          self.heat = nanvalue      
+          nanpresent=True
+          self.message += 'heat is Nan \n'
+       return nanpresent 
+ 
 
    def __str__(self):
        returnstr = self.date.strftime("%Y %m %d %H %M ")
