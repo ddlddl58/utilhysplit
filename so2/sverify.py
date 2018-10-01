@@ -109,7 +109,9 @@ parser.add_option('-d', type="string", dest="drange", \
                   help='daterange YYYY:M:D:YYYY:M:D')
 parser.add_option('--cems', action="store_true", dest="cems", default=False)
 parser.add_option('-o', type="string", dest="tdir", default="./", \
-                  help='directory path')
+                  help='directory path for outputs')
+parser.add_option('--hdir', type="string", dest="hdir", default="", \
+                  help='directory path for hysplit')
 parser.add_option('--obs', action="store_true", dest="obs", default=False)
 parser.add_option('-y', type="string", dest="hysplit", default=None)
 
@@ -191,6 +193,11 @@ if options.hysplit == 'defaults':
    default_setup('SETUP.0', options.tdir)
    default_control('CONTROL.0', options.tdir, run_duration, d1)
 
+if options.hysplit == 'runlist':
+   from shysplit import create_runlist
+   from shysplit import runhandler
+   runlist = create_runlist(options.tdir, options.hdir, d1, d2, source_chunks)
+   #runhandler(runlist, 5, options.tdir)
 
 rfignum=1
 if options.cems:

@@ -22,11 +22,11 @@ ABSTRACT: classes and functions for creating HYSPLIT control and setup files.
    writelanduse - writes ASCDATA.CFG file.
 """
 
-def writelanduse(landusedir, outdir='./'):
+def writelanduse(landusedir, working_directory='./'):
     """writes an ASCDATA.CFG file in the outdir. The landusedir must
        be the name of the directory where the landuse files are located.
     """
-    with  open(outdir + "ASCDATA.CFG", "w") as fid:
+    with  open(working_directory + "ASCDATA.CFG", "w") as fid:
           fid.write("-90.0  -180.0 \n")
           fid.write("1.0    1.0    \n")
           fid.write("180    360    \n")
@@ -237,7 +237,7 @@ class Species():
     def status():
         return Species.total
        
-    def __init__(self, name, psize='0', rate='1', duration=-1, density=2.5, shape=1, date="00 00 00 00 00", wetdep = 1,
+    def __init__(self, name, psize=0, rate='1', duration=-1, density=2.5, shape=1, date="00 00 00 00 00", wetdep = 1,
                  vel = '0.0 0.0 0.0 0.0 0.0' , decay = '0.0' , resuspension='0.0'):
         self.name = name
         self.rate = rate
@@ -377,10 +377,12 @@ class NameList():
         self.nlist = nlist
  
     def add(self, name, value):
-        self.nlist[name] = value
+        self.nlist[name.lower()] = value
 
-    def rename(self, name):
+    def rename(self,name, working_directory=''):
         self.fname = name
+        if working_directory:
+            self.wdir = working_directory
 
     def _load_descrip(self):
         self.descrip['ichem'] = 'Chemistry conversion modules. 0:none, 1:matrix , 2:convert, 3:dust' 
@@ -424,9 +426,10 @@ class NameList():
                 temp = line.strip().split('=')
                 self.nlist[temp[0].strip()] = temp[1].strip(',')
 
-    def write(self, order=None, gem=False):
+    def write(self, order=None, gem=False, verbose=False):
         """ if gem=True then will write &GENPARM at beginning of file rather than &SETUP"""
         if order is None: order = []
+        if verbose: print('WRITING SETUP FILE', self.wdir + self.fname)
         with  open(self.wdir + self.fname, "w") as fid:
             if gem:
                 fid.write('&GEMPARM \n')
@@ -437,7 +440,7 @@ class NameList():
             for key in order:
                 kstr = True
                 try:
-                    fid.write(key + '=' + self.nlist[key] + ',\n')
+                    fid.write(key.lower() + '=' + self.nlist[key] + ',\n')
                 except:
                     print('WARNING: ' + str(key) + ' ' + \
                           str(self.nlist[key]) + ' not str')
@@ -649,7 +652,7 @@ class HycsControl():
             fid.write(str(self.num_sp) + note + "\n")
             iii=0
             for sp in self.species:
-                if iii==0:
+                if iii==0 and annotate:
                    fid.write(sp.strpollutant(annotate=True))
                 else: 
                    fid.write(sp.strpollutant(annotate=False))

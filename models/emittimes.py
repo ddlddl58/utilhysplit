@@ -46,7 +46,6 @@ class EmitTimes(object):
    def read_file(self):
        with open(self.filename, 'r') as fid:
             fid.readline()
-            fid.readline()
             done=False
             while not done:
                ec = EmitCycle()
@@ -194,12 +193,14 @@ class EmitCycle(object):
        if not header: 
          check=False
        else:
-           nrecs =  self.parse_header(header)
+           try:
+              nrecs =  self.parse_header(header)
+           except: 
+              return False
            for line in range(0,nrecs):
                temp = fid.readline()
                recordra.append(self.parse_record(temp))
            self.recordra.extend(recordra)
-           self.nrecs += nrecs         
        return check
 
 
