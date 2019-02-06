@@ -1,0 +1,62 @@
+%\documentclass[jgrga]{agutex}
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\geometry{bottom=20mm, top=20mm}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{enumerate}
+\usepackage{float}
+\usepackage{color}
+\usepackage{multirow}
+\usepackage{natbib}
+\usepackage{amsmath}
+
+
+\title{Modeling Resuspension of Volcanic Ash with HYSPLIT}
+\author{Alice Crawford, Tianfeng Chai, Ariel Stein}
+
+
+\begin{document}
+\newcommand{\mr}{\mathrm}
+\newcommand{\mgv}{\frac{\mathrm{mg}}{\mathrm{m}^3}}
+\newcommand{\kgm}{$\mathrm{kg}/\mathrm{m}^3$}
+\newcommand{\vaftad}{VATD model}
+\newcommand{\fwa}{60 mm}
+\newcommand{\fwc}{50 mm}
+\newcommand{\fwb}{100 mm}
+\newcommand{\um}{\mu\mathrm{m}}
+\newcommand{\ugmc}{\mu\mathrm{g}\mathrm{m}^{-3}}
+\newcommand{\gmc}{\mathrm{g}\mathrm{m}^{-3}}
+\newcommand{\lidar}{LIDAR}
+\newcommand{\gms}{\frac{\mathrm{g}}{\mathrm{m}^2}}
+\newcommand{\fig}{Fig.}
+\newcommand{\tabl}{Table}
+\newcommand{\mumc}{$\mu \mathrm{gm}^{-3}$}
+\newcommand{\PMten}{PM$_10$ \hspace{5pt}}
+\newcommand{\cthresh}{C$_{\mathrm{t}$}}
+\newcommand{\ustart}{$u_{*t}$}
+\newcommand{\ustar}{$u_{*}$}
+\newcommand{\mustart}{u_{*t}}
+\newcommand{\mustar}{u_{*}}
+\newcommand{\eyja}{Eyjafjallojokull}
+\newcommand{\gcm}{\mathrm{g}\;\mathrm{cm}^{-2}}
+\newcommand{\gconc}{\mathrm{g}\;\mathrm{cm}^{3}}
+\newcommand{\ugcm}{\mu\mathrm{g}\;\mathrm{cm}^{-3}}
+\newcommand{\pmten}{$\mathrm{PM}_{10}$ \hspace{5pt}}
+\newcommand{\spms}{suspended particulate monthly summary }
+\newcommand{\spmsn}{suspended particulate monthly summary}
+\newcommand{\spmss}{suspended particulate monthly summaries }
+
+%\maketitle
+%\tableofcontents
+
+\input{introduction}
+\input{modeling}
+
+
+\clearpage
+\bibliography{resuspension}{}
+\bibliographystyle{agufull08}
+
+
+\end{document}

@@ -1,0 +1,39 @@
+
+\subsection{NWP model}
+Data from the European Center for Medium-Range Weather Forecasts (ECMWF) ERA5 global atmospheric reanalysis ~\citep{era5} was used
+as input into HYSPLIT.
+The data set has $0.3^o$ latitude longitude resolution and analyses every hour. We used the output on pressure levels.
+
+We also use data from the WRF model (more info here) 27km, 9km, 3km
+
+%However, if $z_o$ is calculated from 10m wind speeds and friction velocity using the law of the wall, we find values of
+%$z_o \approx 0.1 \mathrm{cm}$ for points over water and $z_o \approx 4.7\mathrm{cm}$ for points over land are common.
+
+Figure~\ref{fig:udist}(a) shows the joint histograms of friction velocity and 10m wind speed. 
+%The two linear relationship observed correspond to source points over land and source points over water.
+The solid lines show the law of the wall relationship with $z_o=0.068, 4.7, 10$, and $50 \mathrm{cm}$.  
+They are not fits but simply shown for comparison. For the same wind speed, source points over water exibit lower
+friction velocities, which corresponds to a lower roughness length. However, wind speeds and thus also friction velocities
+tended to be higher over water.  
+A forecast surface roughness is available with the ERA5 dataset (short-name flsr and paramID 244). 
+It is zero for the source points over the ocean and ranges from zero to almost 90cm for
+the source points over the land. The values for each source point do not vary more than a few cm for each source point over time.
+The roughness lengths from the NWP model fields do not appear to correspond to the roughness length estimated using the law of the wall, particularly for the source points over land.
+
+Figure~\ref{fig:udist}(b) and (c) shows the joint histogram of friction velocity and 10m wind speed for WRF 27km and 9km respectively. 
+The solid lines are the same as shown in (a). 
+One significant different between the WRF joint distributions and the ERA5 is that the highest friction velocities are
+not associated with the highest wind speeds, instead they are associated with higher roughness lengths. 
+
+Figure~\ref{fig:ustarA} shows friction velocities as a function of time for all source points for the ERA5 and WRF runs. 
+Source points for ERA5 which lie over ocean are plotted separately from those which lie over land.
+The letters indicate the time of
+the five main resuspension events that were identified in Section~\ref{sec:measurements}.
+A horizontal line is drawn at $u_*=30\mathrm{cm}\;\mathrm{s}^{-1}$ as threshold friction velocities are upward of this value.
+The ERA5 and WRF runs show similar temporal patterns in values of friction velocities. Elevated $u_*$ is observed between A and B as well
+as concurrent with C,D,E and F. WRF friction velocities are higher in general
+
+
+%between the WRF 27km joint distribution and the ERA5 joint distribution is that top wind speeds are lower, but friction velocities are higher. The wind speeds may be lower, because we do not include 
+
+

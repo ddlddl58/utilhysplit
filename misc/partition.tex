@@ -1,0 +1,171 @@
+\section{Discussion of Friction Velocity for DOE Ashfall Project}
+
+Friction velocity is defined as density multiplied by shear stress.
+
+$$u_* = \rho * \tau$$
+
+The NWP model provides a friction velocity, $\ustarm$, which represents the shear stress over or momentum flux to
+the surface. In a neutral atmosphere, the relationship between the wind speed and friction velocity is given by the
+law of the wall.
+
+$$u(z) = \frac{u_*}{k} \mathrm{ln} \frac{z}{z_0}$$
+
+Where $u(z)$ is the wind speed at height $z$, $z_0$ is the aerodynamic roughness (the height at which wind speed is zero),
+and $k$ is von~Karman's constant $\sim 0.4$. 
+
+Roughness elements generally increase turbulent production and thus enhance the vertical momentum flux. For the same
+ten meter wind speeds, \ustar increases as $z_0$ increases. Ofcourse, mean wind speeds tend to be lower over
+rough surfaces as well since more energy is being diverted to turbulent production. 
+
+%The WRF meteorological model is run to provide meteorological inputs into HYSPLIT without attempting to inform it of
+%the presence of ash deposits. Changes in the land surface have the ability to affect the wind field by changing the amount of drag and
+%thus the momentum flux and thus the velocity profile. Modeling the effect of ash deposits on the wind field  is beyond the scope of this project and any effect would be expected to be small.
+%The thickness of the ash deposits under consideration are on order of millimeters to tens of centimeters which will generally be smaller than the physical height of vegetation (scrub, grass or crops) in the region.
+%In some areas it is possible that the ash deposit could decrease the aerodynamic roughness of the surface. This would tend to cause an increase in the mean wind speed while simultaneously decreasing friction velocity.  
+%
+While shear stress exerted by the atmosphere on the land surface is increased by roughness elements, non-erodible roughness elements
+also absorb much of this momentum. They have a sheltering effect on erodible elements.
+%Thus the threshold friction velocity for a landscape with non-erodible elements, $u_{*t}$  larger than
+%the threshold friction velocity for bare landscape with only the erodible elements, $u_{*ts}$. 
+%The correction factor $f_w(w) >=1$  is
+%The correction factor is sometimes referred to as the drag partition coefficient as it can be seen as an estimate of the fraction of momentum
+%which is transferred to the erodible elements.
+
+DRI's measurements of the mass flux of ash as a function of friction velocity are done in the absence of non-erodible roughness elements such as vegetation. 
+%Though they may include non-erodible elements such as large tephra (on order of millimeters).
+We will refer to the threshold friction velocity measured by DRI as the bare surface threshold friction velocity or $\ustartash$, and
+the friction velocity measured by DRI as the surface friction velocity $\ustarash$. 
+
+The meteorological model provides a friction velocity  which represents the total shear stress on the surface.
+This value, which we will call $\ustarm$,  must be converted into the surface friction velocity, the amount of shear stress which is applied to the erodible elements.
+This can be done by multiplying $\ustarm$ by a correction factor, $R$, which is less than or equal to one.
+
+$$\ustarash =  R \ustarm$$
+
+
+\section{Partitioning}
+
+%$$\mathrm{Log}E = a\mathrm{Log}u_* + b $$
+
+%$$E = 10^b u_*^a = K u_*^a$$
+%
+%For the VTTS ash, DRI finds a to be between about 4 and 4.5 and K between 45 and 151.
+%For the MSH ash, DRI finds a to be between about 5 and 5.5 and K between 700 and 1550.
+%To put these relationships in context, proposed relationships for dust have 
+%An empirical relationship used for dust ~\cite{Westphal87} is $E=1\times10^{-5}u_*^4$
+
+%And other forms ~\citep{Darmenova09} 
+
+%$$E \propto  u_*^{3}\left(1 + \frac{u_{*t}}{u_*}\right) \left(1-\frac{u_{*t}^2}{u_*^2}\right)$$
+%where the threshold friction velocity $u_{*t}$ is a function of particle diameter, $d$.
+
+%~\citep{Raupach etc} 
+
+%The informationw we do have is the 8 meter winds from the meteorological model, the frcition velocity calculated by the meteorological model and the land use type and range of aeroddynamic roughness values for that land type used by WRF. 
+
+One possible way to estimate $\ustarash$ is to use the law of the wall, the aerodynamic roughness,
+$z_0$, provided by the NWP model, and the aerodynamic roughness length of the bare surface, $z_{0s}$.
+~\cite{Marticorena97} assumes an internal boundary layer (IBL) develops between roughness elements and thus there is a height, h, at which the
+logarithmic velocity profile of the IBL transitions to the logarithmic velocity profile of the atmospheric boundary layer (ABL). 
+The correction factor is then:
+%the first level winds (at approximately 8 meters) of the meteorological model,
+%a roughness length of $\zoash$ of 0.001~m and the law of the wall. 
+
+%\begin{equation}
+%\ustarash = 0.4u(z)\left(\mathrm{ln}\frac{z}{\zoash}\right)
+%\label{eq:1}
+%\end{equation}
+
+%Since
+%$u_{*m} = 0.4u(z)\left(\mathrm{ln}\frac{z}{z_o}\right)$,
+
+\begin{equation}
+R(h, z_o, \zoash) = \frac{\ustarash}{u_{*m}} = \frac{\mathrm{ln}\frac{h}{z_o}}{\mathrm{ln}\frac{h}{\zoash}} = 1 - \frac{\mathrm{ln}\frac{z_o}{\zoash}}{\mathrm{ln}\frac{h}{\zoash}} 
+\label{eq:2}
+\end{equation}
+
+The dependence on the height, h, comes in because we are essentially modifying the velocity profile to account for a different roughness length, and we
+are forcing the new velocity profile to have the same wind speed at height h as the original velocity profile.
+%$R(z, z_o, \zoash)$ can be compared to formulations in ~\cite{Mackinnon04, Marticorena97, Shao08, Kok12}
+
+We are constrained by the fact that the only information we have about the terrain is the aerodynamic roughness length, $z_o$. Other formulations for determining the drag partitioning involve quantities such as the roughness density which contain more detailed information about the dimensions and spacing of the roughness elements (their porosity can also be important).
+
+%Equation~\ref{eq:2} is the same as Equation 8 found in 
+~\cite{King05} provides a discussion of of the value of $h$ (height of the internal boundary layer).
+There the following relationships are defined (following ~\citep{Elliot58, Pendergrass84, Marticorena95}):
+
+\begin{equation}
+\frac{z}{\zoash} = a\left(\frac{x}{\zoash}\right)^{0.8}
+\label{eq:9}
+\end{equation}
+
+and
+
+\begin{equation}
+a = 0.75-0.04\;\mathrm{ln}\frac{z_o}{\zoash}
+\label{eq:10}
+\end{equation}
+
+If $\zoash \approx$ 0.001 to .01 $\mathrm{cm}$ and  $z_o \approx$ 1 to 10 $\mathrm{cm}$ then $a \approx$ 0.4  to  0.6 while
+ ~\cite{King05} suggests a vale of 0.7.
+%Note that there is an error in ~\cite{King05} Equation 9 (Here Equation~\ref{eq:9}), which mistakenly puts a ln before the term on the left hand side. 
+
+
+\begin{equation}
+R(z, z_o, \zoash) = \frac{\ustarash}{u_{*m}} = \frac{\mathrm{ln}\frac{z}{z_o}}{\mathrm{ln}\frac{z}{\zoash}} = 1 - \frac{\mathrm{ln}\frac{z_o}{\zoash}}{\mathrm{ln}\left( 0.7\left( \frac{x}{\zoash} \right)^{0.8}\right)}
+\label{eq:3}
+\end{equation}
+
+~\cite{Marticorena95} also make an assumption that $x=10\mathrm{cm}$.  
+Using Equation~\ref{eq:3} would be particularly useful in our case since we do not have detailed information about the roughness elements in the landscape.
+However, Equation~\ref{eq:3} with $x=10\mathrm{cm}$ will return negative $R$ for  larger values of $z_0$.
+Roughness lengths in our domain range from 1 to 15 cm.
+%if $\zoash \approx 0.1 \mathrm{cm}$, then $z \approx 2.8 \mathrm{cm}$. 
+Indeed, ~\cite{King05} finds the relationship compares well with wind tunnel measurements but does not do as well with field measurements. Computed
+ $R$ for field measurements is often negative when the measured values are between 0.2 and 0.5 (see Figure 4 ~\cite{King05}). The predicted value  
+is lower than the measured values in the field. ~\cite{King05} posits that the underestimation of $R$ may be because the relationship is only valid for when
+the difference in the roughness scales is smaller than is often the case in the natural environment. Field data in which the roughness elements were shorter (10 cm) compared
+better than field data in which roughness elements were higher (1 m). 
+To address this problem ~\cite{MacKinnon04} use x=12,255cm. 
+Since x is the distance downstream from a non-erodible element at which the height of the IBL is relevant, it should be larger for larger elements.
+
+~\cite{Darmenova09} explains that for dust $z_{0s}$ may be approximated as 1/30 of the mass median diameter of the coarse mode of the parent soil particles.
+If the median diameter of the parent ash is around 250$\mu m$ (Mastin), then $z_{0s} \approx 0.001cm$. 
+
+In ~\cite{Darmenova09}, the drag partition correction, $R$, is used only to modify the threshold friction velocity, $u_{*t}$. The relationship 
+they use for vertical flux is 
+
+$$E \propto  u_*^{3}\left(1 + \frac{u_{*ts}}{u_*}\right) \left(1-\frac{u_{*ts}^2}{u_*^2}\right)$$
+
+In addition ~\cite{Darmenova09} suggest, recalculating $u_*$ from NWP 10 meter wind speeds and an external dataset of $z_0$ to adjust
+$u_{*m}$. ~\cite{Kok14}, on the other hand, suggests that $u_{*m}$ may be partitioned in a manner similar to $u_{*t}$.
+
+
+%Our vertical flux is of the form
+
+%$$E = c u_{*s}^n = c (R u_{*m})^n = cR^n u_*^n = R^n E $$
+
+%For the VTTS ash, DRI finds n to be between about 4 and 4.5 and c between 45 and 151.
+%For the MSH ash, DRI finds n to be between about 5 and 5.5 and c between 700 and 1550.
+%To put these relationships in context, a common empirical relationship for  is
+%s $E=1\times10^{-5}u_*^4$
+%~\citep{Westphal87}.
+
+
+%where the threshold friction velocity $u_{*t}$ is a function of particle diameter, $d$.
+
+%\begin{figure}
+%\includegraphics[width=110mm]{Rvsz.jpg}
+%\caption{Correction factor, R (Equation~\ref{eq:2}), as a function of z for several different values of $z_o$ and using $\zoash=1\mathrm{mm}$ 
+%}
+%\label{fig:R}
+%\end{figure}
+
+%This is the same as equation 19 in ~\citep{MacKinnon04}. There, the ratio is computed at z=height of the tallest roughness element.
+%Here, we use z=8 because the meteorological model provides 8 meter winds. 
+%There is some dependence on $z$ because $u_{*b}$ is estimated by creating a logarithmic velocity profile at which
+%the velocity
+
+
+
+

@@ -1,0 +1,90 @@
+
+\section{Results}
+
+%-------------------------------------------
+Modeling emissions using equation~\ref{eq:westphal} and modeling transport with HYSPLIT driven by ERA5 produced quite good predictions. These are shown in Figure~\ref{fig:run1}.
+For comparision, prediction using constant emissions are shown as well. Clearly, modeling emissions correctly is important.
+
+However, when HYSPLIT was driven by the 27km WRF, model predictions were overestimated significantly. 
+Figure~\ref{fig:wind_ustar} shows time series of 10 meter winds and friction velocities for all the source points for both the ERA5
+and the 27km WRF. Friction velocities output by WRF are higher and emissions are quite sensitive to these values. 
+
+The overestimation is even more extreme for the 9km WRF  and 3km WRF.
+The 9km WRF runs output friction velocities up to 160 cm/s, more than twice the value of the highest .
+
+%-------------------------------------------
+
+\subsection{Importance of transport}
+
+Predicting high ash concentrations at locations farther away from the source may be easier than predicting high ash concentraions for more proximal locations. For instance, the :w
+:q
+
+It bears mentioning that
+modeling transport correctly was more important for stations which were further away from the source, while modeling emissions
+correctly was more important for stations close to the source.
+Also, the differences between w27A and w27B were smaller at stations further away (Hval and Gren). 
+
+The friction velocity provided by the NWP model represents the total shear stress on the surface and generally areas with higher aerodynamic roughness will 
+
+
+Figure~\ref{fig:correlationsa} shows the correlation coefficient as a function of functional form, $N$, $u_{*t}$ for the period
+of 5/25/2010 through 6/30/2010 using PM$_{10}$ measurements at the four stations shown in Figure~\ref{fig:locations}.
+In the plots, $N=-1, -2, -3, -4$ corresponds to the use of Equations~\ref{eq:leadbetter}, ~\ref{eq:marticorena}, ~\ref{eq:shao}, ~\ref{gillette} respectively.
+
+Figure~\ref{fig:rmse}
+
+%Figure~\ref{fig:correlationsc} shows the correlation coefficient as a function of $N$ and $u_{*t}$ for the period
+%of 10/01/2010 through 2/15/2011 using measurements from the OPC at Drangshilidardalur.
+
+For the $PM_{10}$ meausurements, sources which experienced friction velocities greater than $45 \mathrm{cm} \; \mathrm{s}^{-1}$
+did not place ash at any of the meausurement sites, thus placing the friction velocity above 50~cm~s$^{-1}$ resulted in zero
+correlation.  
+The more likely releationships tend to  pair higher values of $N$ with lower values of $u_{*t}$. This indicates that while
+contributions from sources with low values of friction velocity are important, they must release much less mass than sources
+which experience high values of $u_{*}$.
+
+For values of $N$ lower than 4 or 5, values of 30 or 35 for $u_{*t}$ seem likely to result in higher correlations 
+ which is consistent with what
+has been seen in the literature ~\citep{Leadbetter12, Folch14}.
+
+The most likely relationships found with the $PM_{10}$ measurements from the period of 5/25/201 to 6/30/2010 have
+a high overlap with the most likely relationships found with the OPC counter from 10/1/2011 to 2/15/2011.
+This demonstrates that assimilating measurements in this manner has potential for improving resuspended ash forecasts.
+
+Modeled concentrations are compared to measurements at each of the stations in Figures~\ref{fig:concplota} through ~\ref{fig:concplotskogar}.
+Three modeled concentrations which utilize different values of $N$ and $u_{*t}$ are shown in each plot.
+For the PM$_{10}$ measurements, $N=8$ and $u_{*t}=25$ was the most likely, whie for the OPC measurements, $N=7$ and $u_{*t}=10$
+was the most likely.  As can be seen, the correlations with the OPC measurements were much lower than the correlations with the PM10 meausurements.
+Several high concentration events which were measured by the OPC were not captured by the model and the duration of modeled events tended to be
+too short. It may be that some sources were missing for this. This was the only station located within the resuspended source area. It could
+be the case that localized conditions not captured by the NWP model caused some resuspension events.
+
+Figure~\ref{fig:concplota} shows concentrations as a function of time at the Heimaland station.
+Figure~\ref{fig:concplotb} shows concentrations as a function of time at the Hvolsvollur station.
+Figure~\ref{fig:concplotc} shows concentrations as a function of time at the Hvaleyrarholt station.
+Figure~\ref{fig:concplotd} shows concentrations as a function of time at the Grensavegur station.
+Figure~\ref{fig:concplotskogar} shows concentrations as a function of time at the Drangshilidardalur station.
+
+
+\conclusions  %% \conclusions[modified heading if necessary]
+
+The results agree with the invesgitation by ~\cite{Folch14} which predicted resuspended ash concentrations in South America using functional
+relationships Equation~\ref{eq:shao}, ~\ref{eq:marticorena}, and ~\ref{eq:massflux} with $N=4$ and $u_{*t}=30\mathrm{cm}\;\mathrm{s}^{-1}$.
+~\cite{Folch14} found that the simplest emission scheme 
+
+%Transport and dispersion models aimed at forecasting resuspension of volcanic ash should consider using
+%relatively low cutoff thresholds for friction velocity, of only 10 to 25 cm~s$^-1$ paired with a mass flux
+%relationship which specifies a steep increase in mass flux with $u_*$. 
+
+%Since deposit properties may change over time and from area to area, 
+%a Baysian inference scheme such as demonstrated here
+%can provide information on the most effective mass flux relationships to use for the area and model. 
+%Here we show that data collected over a month period at four measurement stations improved forecasts for a subsequent 4 month time period
+%at a different location.
+(more work in the results section to show this is the case but expect it to be so as liklihoods overlapped significantly).
+
+This scheme may also be useful for applying to dust storms.
+
+
+
+

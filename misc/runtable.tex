@@ -1,0 +1,45 @@
+
+Particle diameters of 1, 5, 10, and 20 $\mu\mathrm{m}$ were modeled. All particles were given a shape factor of 1.
+The 1,5 and 5$\mu\mathrm{m}$ particles were given a density $2.5\mathrm{g}\;\mathrm{cc}^{-1}$ while the 20$\mu\mathrm{m}$ particles had a density of 
+$2.2\mathrm{g}\;\mathrm{cc}^{-1}$. In HYSPLIT, the particle diameter, density and shape are used
+to calculate a settling velocity. The ~\cite{Ganser93, dare} formulation was used to calculate settling velocity.
+The output concentration grid for each run has resolution 50 meters in he vertical. Horizontal resolution for a run set was  either $0.2 \times 0.2$ or $0.05 \times 0.05$ degrees.
+Table~\ref{tab:runs} associates a run set identifier with pertinent model inputs.
+Model inputs not specified in the table remained the same for all run sets.
+
+
+ \begin{table}
+ \caption{Summary of sets of HYSPLIT runs.}
+ \centering
+ \begin{tabular}{l c c c}
+ \hline
+  Run Set  & NWP model & Concentration  & Number release points  \\
+   & NWP model & Grid Resoluton & per source \\
+ \hline
+   E     & ERA5    & $0.2^o$  & 1  \\
+   W27A  & WRF 27km& $0.2^o$  & 1  \\
+   W27B  & WRF 27km& $0.05^o$ & 81 \\
+   W9    & WRF 9km & $0.2^o$  & 1  \\
+   W3    & WRF 3km & $0.05^o$ & 1  \\
+ \hline
+ %\multicolumn{2}{l}{$^{a}$Footnote text here.}
+ \label{tab:runs}
+ \end{tabular}
+ \end{table}
+
+\begin{table}
+ \caption{Postprocessing}
+ \centering
+ \begin{tabular}{l c c c}
+ \hline
+  Identifer & Emission & Source set  & particle size  \\
+ \hline
+r1s4psd & WE & s4 & PSD \\ 
+r1s4p5 & WE & s4 & 5um  \\
+
+ \hline
+ %\multicolumn{2}{l}{$^{a}$Footnote text here.}
+ \label{tab:results}
+ \end{tabular}
+ \end{table}
+

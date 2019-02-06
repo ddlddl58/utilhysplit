@@ -1,0 +1,505 @@
+
+
+
+\begin{abstract}
+We model the resuspension of volcanic ash from a deposit in Iceland with HYSPLIT driven by meteorological
+fields from the ECMWF ERA5 dataset as well as WRF. The source term for the resuspended ash is assumed to be
+a function of friction velocity provided by numerical weather prediction model. 
+The sensitivity of model forecasts to the form of the source term relationship is investigated.
+
+\end{abstract}
+
+
+\introduction  %% \introduction[modified heading if necessary]
+
+Atmospheric transport and dispersion models (ATDM) are often used to model concentrations
+of resuspended materials such as volcanic ash and minearl dust. In some applications a forecast of when and where
+high concentrations of such materials can be expected is desired (cite). In other applications, the aim
+is to determine the source of observed concentrations of such materials (cite).
+%Here we are concerned with predicting concentrations of volcanic ash, but the technique 
+%may be applied to other problems with minor modifications. 
+
+ATDM require inputs from a numerical weather prediction (NWP) model and
+information about the initial position and amount of material. To model resuspension with a foward modeling setup, the ATDM
+requires information about the location of the source regions and the mass of material lifted from each source
+region as a function of time. 
+
+Dust and ash are resuspended
+by a transfer of momentum from the atmosphere to the deposit. The amount of material resuspended
+depends on both properties of the atmosphere and properties of the deposit ~\citep{Kok12}. 
+Very rarely is there detailed information about deposit properties such as grain size distribution, soil moisture and deposit depth.
+Often, even the horizontal extent of the deposit is not clearly known. 
+Furthermore, deposit properties change over time. 
+The NWP model supplies information about the atmosphere, in particular, the friction velocity which characterizes
+the momentum flux. However, the spatial and time resolution of the data available may be fairly course and
+reuspension depends on very local conditions. The presence of non-erodible elements may also reduce emissions.
+
+Although the prospect for forecasting ash and dust concentrations resulting from resuspension may seem bleak, models are often
+fairly successful (citations). Here we delve into why and what factors are most important for successful modeling.
+
+%Here we investigate the sensitivity of model predictions to the form of the mass flux relationship.
+%Here we investigate a Bayesian inverse scheme for tuning the source term relationship using observational data. 
+%The purpose of the
+%scheme is not to unearth a correct or universal source term relationship,
+%We  use observational data to identify
+%effective source term relationships for the given location, time, and ATDM, NWP model combination. 
+
+The ATDM model used is HYSPLIT. HYSPLIT is the operational model
+at four volcanic ash advisory centers which are responsible for issuing volcanic ash advisories (VAAs) in the event of
+a resuspension episode which would affect aviation.
+The Anchorage VAAC (information about how many warnings for resuspended ash they have produced in the last decade).
+
+%The resuspension of dust 
+
+%Modeling of resuspended materials such as dust and volcanic ash is
+
+%Resuspension of volcanic ash is important.
+%Iceland
+%Katmai
+%South America
+
+%after any eruption
+%Similarities and differences than dust.
+
+%\section{Resuspension in Iceland}
+%TEXT
+
+\section{Measurements}
+
+Describe measurements.
+Measurements same as though used in ~\cite{Leadbetter12}.
+
+Measurements from PM$_{10}$ monitors at  4 stations for dates May 20, 2010 through June 30, 2010.  
+Two urban stations, Grensasvegur and Hvaleyrarholt. Grensasvergur is located near a busy road.
+The Hvolsvollur and Heimaland stations are in rural areas.
+
+%Measurements at one station for dates September 2010 through February 2011. These measurements are from an optical particle counter, OPC.
+%The OPC detects particles in the range of 0.25 to 32 $\mu\mathrm{m}$. 
+
+\section{Method}
+In this section, we describe the Lagrangian transport and dispersion  model, HYSPLIT, the meteorological data sets used as input into HYSPLIT, and the method of implementing the simple grid-search algorithm.
+
+\subsubsection{NWP model}
+Data from the European Center for Medium-Range Weather Forecasts (ECMWF) ERA5 global atmospheric reanalysis ~\citep{era5} was used
+as input into HYSPLIT.
+The data set has $0.3^o$ latitude longitude resolution and analyses every hour. We used the output on pressure levels.
+
+We also use data from the WRF model (more info here) 27km, 9km, 3km
+
+\subsubsection{Modeling Transport}
+HYSPLIT is a Lagrangian transport and dispersion model developed by the National Oceanic and Atmospheric Administration's Air Resources Laboratory (NOAA ARL).  
+The model is used operationally at the  Washington, Anchorage, Darwin and Wellington volcanic ash advisory centers (VAACs) for modeling the transport and dispersion of volcanic ash{\color{blue}.} 
+It is also used to provide 
+forecasts of smoke from wild fires ~\citep{Rolph09, Stein09}, forecasts of windblown dust ~\citep{Draxler10}, and atmospheric dispersion products for chemical and nuclear accidents~\citep{Draxler12}. The model details and history are described in 
+~\cite{Draxler97, Draxler98, bams}. 
+%Here the model is used in particle (rather than puff) mode. The model is configured to calculate wet and dry deposition. 
+%Column mass loadings are calculated over a 0.05$^o$ latitude by 0.1$^o$ longitude grid.  At the latitudes of interest, this corresponds to $\sim$ 6km $\times$ 6km grid.
+
+HYSPLIT model runs were performed which release one unit of mass for each particle size from every source location every hour from May 20 to June 30, 2010.
+Particle diameters of 1, 5, 10, and 20 $\mu\mathrm{m}$ were used. All particles had a shape factor of 1.
+The 1,5 and 5$\mu\mathrm{m}$ particles were given a density $2.5\mathrm{g}\;\mathrm{cc}^{-1}$ while the 20$\mu\mathrm{m}$ particles had a density of 
+$2.2\mathrm{g}\;\mathrm{cc}^{-1}$. In HYSPLIT, the particle diameter, density and shape are used
+to calculate a settling velocity. The ~\cite{Ganser93, dare} formulation was used to calculate settling velocity.
+The output concentration grid for each run has resolution 50 meters in he vertical. Horizontal resolution was either $0.2x0.2$ or $0.05x0.05$ degrees.
+Additionally a database of friction velocity, precipitation  and 10m wind speed at each source point at each hour was created from the NWP outputs.
+
+Concentrations for each measurement station are extracted from each of the HYSPLIT  output files in unit mass per meter cubed. 
+%The unit mass is converted
+%to $\mu\mathrm{g}\mathrm{m}^-3$ using an expression which relates the flux of mass at the source to the precipitation and friction velocity. 
+A transfer coefficient matrix, {\bf T}, is constructed in  
+which the  values, $T_{ij}$,  are modeled concentrations (in unit mass per volume) for which each source, $i$,  contributes to each measurement, $j$.
+The source is specified by the particle size, location of release, and time of release. 
+The matrix can be multiplied by the emissions vector, \vec{E}, to obtain a modeled measurement vector, \vec{M},  with values for the forecast concentrations.
+
+$$M_j = \sum_{i} E_i T_{ij} $$
+
+Figure~\ref{fig:sources} shows the center of the source locations. These were chosen to coincide with the center of the NWP grid cells. For most runs, all particles
+were released from the center point. For one run (runid 11) which was driven by the 27km WRF, particles were released at 3km intervals throughout the source area. Thus particle
+release locations would coincide with particle release locations for the run driven by the 3km WRF.
+
+One advantage of this setup is that once all the model runs are completed, different formulations for determining the emissions can
+be applied relatively quickly without running HYSPLIT again. 
+Although many HYSPLIT runs are needed, the individual runs are short and they can be run in parallel. However, computational time does
+increase significantly at higher resolution. For the 3km WRF run, there are 81 source points for each single source in the 27km WRF run.
+The transfer coefficient matrix is thus significantly larger as well.
+
+Another advantage is that the effect of the modeled transport on the modeled concentrations can be examined separately from
+the effect of the modeled emissions.   
+
+%Here we optimze \vec{E} by matching \vec{M} with observations.  
+
+\subsubsection{Modeling Emissions}
+
+An emissions vector \vec{E} is constructed by estimating the mass flux of material from each source.
+Emissions of 
+
+\begin{equation}
+\Phi(u_*, u_{*t}) =\begin{cases}
+G(x)u_*^N \;\;\; u_{*} \geq u_{*t} \\
+0 \;\;\;\;\;\;  u_* < u_{*t} 
+\end{cases}
+\label{eq:massflux}
+\end{equation}
+
+A widely used empirical relationship used for the mass flux of dust developed in ~\citep{westphal}  
+uses $N=4$ and $G=1\times10^{-5}$ is a constant. 
+
+\begin{equation}
+\Phi(u_*, u_{*t}) =\begin{cases}
+G(x)u_*^N (1-\frac{u_{*t}^{N-1}}{u_{*}^{N-1}})  \;\;\; u_{*} \geq u_{*t} \\
+0 \;\;\;\;\;\;  u_* < u_{*t} 
+\end{cases}
+\label{eq:shao}
+\end{equation}
+
+
+\begin{equation}
+\Phi(u_*, u_{*t}) =\begin{cases}
+1\times10^{-5}u_*^4 \;\;\; u_{*} \geq u_{*t} \\
+0 \;\;\;\;\;\;\;\;\;\;  u_* < u_{*t} 
+\end{cases}
+\label{eq:westphal}
+\end{equation}
+
+$u_*$ is the friction velocity in $\mathrm{m}\;\mathrm{s}^{-1}$ and $u_{*t}$ is a threshold friction velocity.
+The units of the empirical constant, $1\times10^{-5}$ are such that the vertical flux, $\Phi$ is in units of kg~m$^{-2}$~s$^{-1}$.
+
+%Although there are more sophisticated relationships which take into account ......
+
+To model resuspension of volcanic ash ~\cite{Leadbetter12} uses a source strength proportional to
+$(u_{*}-u_{*t})^{3}$ and a threshold friction velocity $u_{*t} = 40 \mathrm{cm} \; \mathrm{s}^{-1}$. 
+They find that using $u_{*t} = 50 \mathrm{cm} \; \mathrm{s}^{-1}$ resulted in missed or shortened resuspension events. 
+They do not investigate the sensitivity of their results to changes in
+the source strength relationship.
+
+~\cite{Folch14} investigates the use of several relationships to model resuspension of volcanic ash in South America.
+He uses the simple relationship in ~\cite{westphal} as well as relationships developed for dust in ~\cite{Marticorena97} and
+~\cite{Shao93} and found that Equation~\ref{eq:westphal} resulted in the best model predictions, although the other
+relationships performed adequately. All relationships needed to be scaled to reproduce the magnitude of resuspension events.
+
+The ~\cite{Marticorena97} relationship is proportional to $u_*(u_*^2 -u_{*t}^2)$ and has a threshold friction velocity
+that is dependant on particle size. 
+
+
+%$$E = K u_*(U_*^2-u_{*t}^2(d)) $$
+%where the threshold friction velocity $u_{*t}$ is a function of particle diameter, $d$.
+
+%\subsubsection{Testing sources}
+%
+%When modeling dust or ash resuspension, the modeler often has to contend with an uncertain source area. 
+%In this case, the area around the volcano is assumed to have deposits of ash (citation). However, some areas may 
+%Also, our grid of source locations is relatively course. Some grid squares contain both water and land.
+%Here we apply a simple scheme to identify sources which should not be used.
+
+%First concentrations at each measurement station due to each latitude longitude source are calculated and compared to
+%measurements at the stations. The Pearson correlation coefficient is calculated for each latitude longitude source.
+%Sources which produce concentrations with a high negative correlation with observations are removed from consideration.
+
+\subsubsection{Particle Size}
+
+While the particle size distribution of the deposit is expected to affect the magnitude of emissions, there is evidence that
+both for dust and volcanic ash, it does not greatly affect the particle size distribution of the resuspended material (~\citep{Mahowald14,DRI}).
+~\cite{Kok11, Kok11b, Mahowald14} present evidence that the PSD of resuspended dust particles less than $5\mu\mathrm{m}$ is independent of the PSD of the dust deposit and $u_{*t}$.
+There is no particular reason to believe that ash will behave similary to mineral dust in this respect. The brittle fragmentation theory proposed by ~\cite{Kok11} 
+
+
+~\cite{DRI} conducted laboratory measurements of resuspension of ash collected from two different ash deposits. The PSDs of the bulk ash were quite different 
+as were the measured emission relationsips. However, the PSDs of the resuspended ash was very similar. This suggests that, like dust, the PSD of the resuspended material may be treated as independant of the PSD of the parent deposit. 
+~\cite{Folch14} found that emission schemes in which threshold friction velocity (and thus emissions) was dependent on particle size did not perform better than
+a simple emission scheme which did
+
+%Thus it is reasonable to model emissions using a relationship which predicts total mass flux of a certain particle size range (for instance PM10) 
+%and possibly as a function of deposit properties including deposit PSD and then distribute the mass according to an empirically determined resuspended particle size distribution.
+
+When modeling transport, the particle size, shape and density of the modeled material is used to calculate a gravitational settling velocity as well as the deposition velocity.
+Computational particles with the same same settling velocity will behave identically in the model. 
+The fall velocities for these particle sizes calculated using the formulation in ~\cite{Ganser} are 
+7.6e-7, 7.6e-5, 1.9e-3, 7.6e-3, 3.0e-2 m/s for the 0.1, 1,5,10 and 20 $\mu\mathrm{m}$ particles respectively. 
+The fall velocity calculated in the model is dependent on 
+Each particle size bin represents particles with similar settling velocities. 
+
+The settling velocity affects modeled transport in
+two main ways. Deposition will decrease the amount of material in the tranported plume and gravitational settling combined with wind
+shear can cause different size particles to be transported in different directions and at different speeds. 
+
+In our setup, we can compare transport of the different particle sizes by applying a constant emissions vector and comparing concentrations (in arbitrary units) due to each
+particle size. 
+
+\subsubsection{Transport differences}
+
+Differences in modeled concentrations can be due to either differences in modeled emissions or modeled transport. 
+In Run10 particles were released only from the center of each source point, while in Run11 particles were released 
+
+
+
+\subsubsection{Drage partition correction}
+
+Somewhat unexpectedly, modeling emissions using equation~\ref{eq:westphal} and modeling transport with HYSPLIT driven by ERA5 produced quite good predictions. These are shown in Figure~\ref{fig:run1}.
+For comparision, prediction using constant emissions are shown as well. Clearly, modeling emissions correctly is important.
+
+However, when HYSPLIT was driven by the 27km WRF, model predictions were overestimated significantly. 
+Figure~\ref{fig:wind_ustar} shows time series of 10 meter winds and friction velocities for all the source points for both the ERA5
+and the 27km WRF. Friction velocities output by WRF are higher and emissions are quite sensitive to these values. 
+
+The overestimation is even more extreme for the 9km WRF  and 3km WRF.
+The 9km WRF runs output friction velocities up to 160 cm/s, more than twice the value of the highest .
+
+The friction velocity provided by the NWP model represents the total shear stress on the surface and generally areas with higher aerodynamic roughness will 
+
+
+
+~\cite{Darmenova} suggests calculating $u_*$ from ten meter wind speeds using Equation~\ref{eq:lawofwall} and an aeolian roughness length which may be much smaller than aerodynamic roughness length from the NWP model.  Doing so is similar to applying the 
+drag partition correction described in~\citep{Marticorena97,MacKinnon04,Darmenova09}. 
+In a neutral PBL where the velocity profile is logarithmic, the relcalulated friction velocity, $u_*'$, will be related to the model friction velocity $u_*$ in the following way
+
+$$\frac{u_*'}{u_*} = 1 - \frac{\mathrm{ln}\frac{z_o}{z_{os}}}{\mathrm{ln}\frac{10\matrhm{m}}{z_{os}}} $$
+
+%~\cite{Marticorena97} assumes an internal boundary layer, IBL, develops between roughness elements and there is a height, h, at which the logarithmic velocity profile of the IBL transitions to the logarithmic velocity profile of the atmospheric boundary layer. 
+
+Following this procedure using  $z_0=0.001m$  resulted in model predictions which were comparable to those produced with the ERA5 data. Figure~\ref{fig:ustar27} plots friction velocity output by the model vs. friction velocity calculated from ten meter wind speeds. Figure~\ref{fig:run11} shows model predictions and observations at the five measurement sites.
+
+However, using this procedure on the modeled emissions with the ERA5 data resulted in much worse predictions.
+
+For the 9km WRF, using $z_0=0.0001m$ yielded  comparable results.
+
+It is worth noting that in ~\cite{Darmenova09} and elsewhere, the drag partition correction is applied to the threshold friction velocity and the vertical mass flux is.
+
+
+
+
+
+\subsubsection{Sensitivity Analysis}
+
+Here we investigate the relationship between the emissions and the friction velocity, $u_*$, provided by the meteorological model.
+To begin with, it is assumed that the mass flux is related to the friction velocity in the following manner.
+
+\begin{equation}
+\Phi(u_*, u_{*t}) =\begin{cases}
+Au_*^N \;\;\; u_{*} \geq u_{*t} \\
+0 \;\;\;\;\;\;  u_* < u_{*t} 
+\end{cases}
+\label{eq:massflux}
+\end{equation}
+
+Where A, N, and $u_{*t}$ are unknown. 
+%Other unknowns not investigated here include the particle size distribution, source area extent, depenedence on precipitation.
+
+We assume that $A$ can be any
+positive real number. $N$ and $u_{*t}$ can take on any of the following values, in any combination.
+$$ u_{*t} = 10,15,20,25,30,35,40,45,50 \; \mathrm{cm} \; \mathrm{s}^{-1}$$
+$$ N = 1,2,3,4,5,6,7,8,9 $$
+
+We also look at the following relationships
+
+\begin{equation}
+\Phi(u_*, u_{*t}) =\begin{cases}
+A(u_*^3 - u_{*t}^3)  \;\;\; u_{*} \geq u_{*t} \\
+0 \;\;\;\;\;\;  u_* < u_{*t} 
+\end{cases}
+\label{eq:leadbetter}
+\end{equation}
+
+%This same as next one.
+%\begin{equation}
+%\Phi(u_*, u_{*t}) =\begin{cases}
+%Au_* (u_*^2 - u_{*t}^2)  \;\;\; u_{*} \geq u_{*t} \\
+%0 \;\;\;\;\;\;  u_* < u_{*t} 
+%\end{cases}
+%\label{eq:marticorena}
+%\end{equation}
+
+\begin{equation}
+\Phi(u_*, u_{*t}) =\begin{cases}
+Au_*^3 (1-\frac{u_{*t}^2}{u_{*}^2})  \;\;\; u_{*} \geq u_{*t} \\
+0 \;\;\;\;\;\;  u_* < u_{*t} 
+\end{cases}
+\label{eq:shao}
+\end{equation}
+
+\begin{equation}
+\Phi(u_*, u_{*t}) =\begin{cases}
+Au_*^4 (1-\frac{u_{*t}}{u_{*}})  \;\;\; u_{*} \geq u_{*t} \\
+0 \;\;\;\;\;\;  u_* < u_{*t} 
+\end{cases}
+\label{eq:gillette}
+\end{equation}
+
+These functional forms have been suggested in ~\cite{Shao08}, ~\cite{Gillette}, ~\cite{Marticorena}, ~\cite{Leadbetter12}.
+
+The constant $A$ is estimated by plotting observations vs. forecasts and performing a linear regression to find the slope.
+
+????
+To reduce bias, cumulative distribution function, CDF,  matching is performed. CDF matching can help account for
+background concentrations.
+
+Then the Pearson correlation coefficient, $r$,  and root mean square error, rmse, are calculated 
+
+
+\section{Results}
+
+Figure~\ref{fig:correlationsa} shows the correlation coefficient as a function of functional form, $N$, $u_{*t}$ for the period
+of 5/25/2010 through 6/30/2010 using PM$_{10}$ measurements at the four stations shown in Figure~\ref{fig:locations}.
+In the plots, $N=-1, -2, -3, -4$ corresponds to the use of Equations~\ref{eq:leadbetter}, ~\ref{eq:marticorena}, ~\ref{eq:shao}, ~\ref{gillette} respectively.
+
+Figure~\ref{fig:rmse}
+
+%Figure~\ref{fig:correlationsc} shows the correlation coefficient as a function of $N$ and $u_{*t}$ for the period
+%of 10/01/2010 through 2/15/2011 using measurements from the OPC at Drangshilidardalur.
+
+For the $PM_{10}$ meausurements, sources which experienced friction velocities greater than $45 \mathrm{cm} \; \mathrm{s}^{-1}$
+did not place ash at any of the meausurement sites, thus placing the friction velocity above 50~cm~s$^{-1}$ resulted in zero
+correlation.  
+The more likely releationships tend to  pair higher values of $N$ with lower values of $u_{*t}$. This indicates that while
+contributions from sources with low values of friction velocity are important, they must release much less mass than sources
+which experience high values of $u_{*}$.
+
+For values of $N$ lower than 4 or 5, values of 30 or 35 for $u_{*t}$ seem likely to result in higher correlations 
+ which is consistent with what
+has been seen in the literature ~\citep{Leadbetter12, Folch14}.
+
+The most likely relationships found with the $PM_{10}$ measurements from the period of 5/25/201 to 6/30/2010 have
+a high overlap with the most likely relationships found with the OPC counter from 10/1/2011 to 2/15/2011.
+This demonstrates that assimilating measurements in this manner has potential for improving resuspended ash forecasts.
+
+Modeled concentrations are compared to measurements at each of the stations in Figures~\ref{fig:concplota} through ~\ref{fig:concplotskogar}.
+Three modeled concentrations which utilize different values of $N$ and $u_{*t}$ are shown in each plot.
+For the PM$_{10}$ measurements, $N=8$ and $u_{*t}=25$ was the most likely, whie for the OPC measurements, $N=7$ and $u_{*t}=10$
+was the most likely.  As can be seen, the correlations with the OPC measurements were much lower than the correlations with the PM10 meausurements.
+Several high concentration events which were measured by the OPC were not captured by the model and the duration of modeled events tended to be
+too short. It may be that some sources were missing for this. This was the only station located within the resuspended source area. It could
+be the case that localized conditions not captured by the NWP model caused some resuspension events.
+
+Figure~\ref{fig:concplota} shows concentrations as a function of time at the Heimaland station.
+Figure~\ref{fig:concplotb} shows concentrations as a function of time at the Hvolsvollur station.
+Figure~\ref{fig:concplotc} shows concentrations as a function of time at the Hvaleyrarholt station.
+Figure~\ref{fig:concplotd} shows concentrations as a function of time at the Grensavegur station.
+Figure~\ref{fig:concplotskogar} shows concentrations as a function of time at the Drangshilidardalur station.
+
+
+\conclusions  %% \conclusions[modified heading if necessary]
+
+The results agree with the invesgitation by ~\cite{Folch14} which predicted resuspended ash concentrations in South America using functional
+relationships Equation~\ref{eq:shao}, ~\ref{eq:marticorena}, and ~\ref{eq:massflux} with $N=4$ and $u_{*t}=30\mathrm{cm}\;\mathrm{s}^{-1}$.
+~\cite{Folch14} found that the simplest emission scheme 
+
+Transport and dispersion models aimed at forecasting resuspension of volcanic ash should consider using
+relatively low cutoff thresholds for friction velocity, of only 10 to 25 cm~s$^-1$ paired with a mass flux
+relationship which specifies a steep increase in mass flux with $u_*$. 
+
+Since deposit properties may change over time and from area to area, 
+%a Baysian inference scheme such as demonstrated here
+can provide information on the most effective mass flux relationships to use for the area and model. 
+Here we show that data collected over a month period at four measurement stations improved forecasts for a subsequent 4 month time period
+at a different location.
+(more work in the results section to show this is the case but expect it to be so as liklihoods overlapped significantly).
+
+This scheme may also be useful for applying to dust storms.
+
+
+
+
+\bibliography{esp,resuspension2}{}
+\bibliographystyle{agufull08}
+
+
+
+\begin{figure}[t]
+\includegraphics[width=16cm]{iceland_locations.jpg}
+\caption{Location of HYSPLIT sources (blue dots) and measurements sites (green squares)}
+\label{fig:sources}
+\end{figure}
+%
+
+\begin{figure}[t]
+\includegraphics[width=16cm]{ALLCorr.jpg}
+\caption{Correlation coefficient of observations and measurements for the period of May 25 2010 through June 30 2010
+for the stations hval, gren, hvol, heim.
+Measurements and observations 1 hour averages.}
+\label{fig:correlationsa}
+\end{figure}
+
+\begin{figure}[t]
+\includegraphics[width=16cm]{ALLCorr24h.jpg}
+\caption{Correlation coefficient of observations and measurements for the period of May 25 2010 through June 30 2010
+for the stations hval, gren, hvol, heim.
+Measurements and observations are 24 hour averages.}
+\label{fig:correlationsb}
+\end{figure}
+
+\begin{figure}[t]
+\includegraphics[width=16cm]{ALLCorrb.jpg}
+\caption{Correlation coefficient of observations and measurements for the period October 1 2010 through February 15 2011
+for measurements at  Drangshlidardalur. The measurements and forecasts are for a 1 hour average.}
+\label{fig:correlationsc}
+\end{figure}
+
+\begin{figure}[t]
+\includegraphics[width=16cm]{ALLCorr_skogar_24h.jpg}
+\caption{Correlation coefficient of observations and measurements for the period October 1 2010 through February 15 2011
+for measurements at  Drangshlidardalur. The measurements and forecasts are for a 24 hour average.}
+\label{fig:correlationsd}
+\end{figure}
+
+
+\begin{figure}[t]
+\includegraphics[width=16cm]{fig1.jpg}
+\caption{Concentration as a function of time at Hvaleyrarholt.
+Red shows PM$_10$ measurements. Blue shows $N=8$ and $u_{*t}=25\mathrm{cm}\;\mathrm{s}^{-1}$ (correlation 0.71).
+Green shows $N=7$ and $u_{*t}=10\mathrm{cm}\;\mathrm{s}^{-1}$ (correlation 0.69).
+shows $N=4$ and $u_{*t}=35\mathrm{cm}\;\mathrm{s}^{-1}$ (correlation 0.68).
+for measurements at  Drangshlidardalur}
+\label{fig:concplota}
+\end{figure}
+
+\begin{figure}[t]
+\includegraphics[width=16cm]{fig2.jpg}
+\caption{Concentration as a function of time at Grensasvegur.
+Red shows PM$_10$ measurements. Blue shows $N=8$ and $u_{*t}=25\mathrm{cm}\;\mathrm{s}^{-1}$ (correlation 0.71).
+Green shows $N=7$ and $u_{*t}=10\mathrm{cm}\;\mathrm{s}^{-1}$ (correlation 0.69).
+shows $N=4$ and $u_{*t}=35\mathrm{cm}\;\mathrm{s}^{-1}$ (correlation 0.68).
+for measurements at  Drangshlidardalur}
+\label{fig:concplotb}
+\end{figure}
+
+\begin{figure}[t]
+\includegraphics[width=16cm]{fig3.jpg}
+\caption{Concentration as a function of time at Heimaland.
+Red shows PM$_10$ measurements. Blue shows $N=8$ and $u_{*t}=25\mathrm{cm}\;\mathrm{s}^{-1}$ (correlation 0.71).
+Green shows $N=7$ and $u_{*t}=10\mathrm{cm}\;\mathrm{s}^{-1}$ (correlation 0.69).
+shows $N=4$ and $u_{*t}=35\mathrm{cm}\;\mathrm{s}^{-1}$ (correlation 0.68).
+for measurements at  Drangshlidardalur}
+\label{fig:concplotc}
+\end{figure}
+
+\begin{figure}[t]
+\includegraphics[width=16cm]{fig4.jpg}
+\caption{Concentration as a function of time at Hvolsvollur.
+Red shows PM$_10$ measurements. Blue shows $N=8$ and $u_{*t}=25\mathrm{cm}\;\mathrm{s}^{-1}$ (correlation 0.71).
+Green shows $N=7$ and $u_{*t}=10\mathrm{cm}\;\mathrm{s}^{-1}$ (correlation 0.69).
+Cyan shows $N=4$ and $u_{*t}=35\mathrm{cm}\;\mathrm{s}^{-1}$ (correlation 0.68).
+for measurements at  Drangshlidardalur}
+\label{fig:concplotd}
+\end{figure}
+
+\begin{figure}[t]
+\includegraphics[width=16cm]{fig1_skogar.jpg}
+\caption{Concentration as a function of time at Drangshlidalur. 1 hour averages.
+Red shows OPC measurements. Blue shows $N=8$ and $u_{*t}=25\mathrm{cm}\;\mathrm{s}^{-1}$ (correlation 0.30).
+Green shows $N=7$ and $u_{*t}=10\mathrm{cm}\;\mathrm{s}^{-1}$ (correlation 0.31).
+Cyan shows $N=4$ and $u_{*t}=35\mathrm{cm}\;\mathrm{s}^{-1}$ (correlation 0.26).
+for measurements at  Drangshlidardalur}
+\label{fig:concplotskogar}
+\end{figure}
+
+\begin{figure}[t]
+\includegraphics[width=16cm]{fig1_skogar_24h.jpg}
+\caption{Concentration as a function of time at Drangshlidalur. 24 hour averages.
+Red shows OPC measurements. Blue shows $N=8$ and $u_{*t}=25\mathrm{cm}\;\mathrm{s}^{-1}$ (correlation 0.66).
+Green shows $N=7$ and $u_{*t}=10\mathrm{cm}\;\mathrm{s}^{-1}$ (correlation 0.64).
+Cyan shows $N=9$ and $u_{*t}=40\mathrm{cm}\;\mathrm{s}^{-1}$ (correlation 0.73).
+for measurements at  Drangshlidardalur}
+\label{fig:concplotskogar24}
+\end{figure}
+
+
+

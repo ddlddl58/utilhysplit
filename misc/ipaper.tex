@@ -1,0 +1,410 @@
+%% Copernicus Publications Manuscript Preparation Template for LaTeX Submissions
+%% ---------------------------------
+%% This template should be used for copernicus.cls
+%% The class file and some style files are bundled in the Copernicus Latex Package, which can be downloaded from the different journal webpages.
+%% For further assistance please contact Copernicus Publications at: production@copernicus.org
+%% https://publications.copernicus.org/for_authors/manuscript_preparation.html
+
+
+%% Please use the following documentclass and journal abbreviations for discussion papers and final revised papers.
+
+
+%% 2-column papers and discussion papers
+\documentclass[acp, manuscript]{copernicus}
+
+%% Journal abbreviations (please use the same for discussion papers and final revised papers)
+
+% Archives Animal Breeding (aab)
+% Atmospheric Chemistry and Physics (acp)
+% Advances in Geosciences (adgeo)
+% Advances in Statistical Climatology, Meteorology and Oceanography (ascmo)
+% Annales Geophysicae (angeo)
+% ASTRA Proceedings (ap)
+% Atmospheric Measurement Techniques (amt)
+% Advances in Radio Science (ars)
+% Advances in Science and Research (asr)
+% Biogeosciences (bg)
+% Climate of the Past (cp)
+% Drinking Water Engineering and Science (dwes)
+% Earth System Dynamics (esd)
+% Earth Surface Dynamics (esurf)
+% Earth System Science Data (essd)
+% Fossil Record (fr)
+% Geographica Helvetica (gh)
+% Geoscientific Instrumentation, Methods and Data Systems (gi)
+% Geoscientific Model Development (gmd)
+% Hydrology and Earth System Sciences (hess)
+% History of Geo- and Space Sciences (hgss)
+% Journal of Micropalaeontology (jm)
+% Journal of Sensors and Sensor Systems (jsss)
+% Mechanical Sciences (ms)
+% Natural Hazards and Earth System Sciences (nhess)
+% Nonlinear Processes in Geophysics (npg)
+% Ocean Science (os)
+% Proceedings of the International Association of Hydrological Sciences (piahs)
+% Primate Biology (pb)
+% Scientific Drilling (sd)
+% SOIL (soil)
+% Solid Earth (se)
+% The Cryosphere (tc)
+% Web Ecology (we)
+% Wind Energy Science (wes)
+
+
+%% \usepackage commands included in the copernicus.cls:
+%\usepackage[german, english]{babel}
+%\usepackage{tabularx}
+%\usepackage{cancel}
+%\usepackage{multirow}
+%\usepackage{supertabular}
+%\usepackage{algorithmic}
+%\usepackage{algorithm}
+%\usepackage{amsthm}
+%\usepackage{float}
+%\usepackage{subfig}
+%\usepackage{rotating}
+
+
+\begin{document}
+
+\title{Modeling the transport and dispersion of resuspended volcanic ash.}
+
+% \Author[affil]{given_name}{surname}
+
+\Author[]{Alice}{Crawford}
+\Author[]{Christopher}{Loughner}
+\Author[]{Ariel}{Stein}
+
+\affil[]{NOAA ARL}
+\affil[]{ADDRESS}
+
+%% The [] brackets identify the author with the corresponding affiliation. 1, 2, 3, etc. should be inserted.
+
+\runningtitle{Resuspended volcanic ash}
+
+\runningauthor{TEXT}
+
+\correspondence{NAME (EMAIL)}
+
+\received{}
+\pubdiscuss{} %% only important for two-stage journals
+\revised{}
+\accepted{}
+\published{}
+
+%% These dates will be inserted by Copernicus Publications during the typesetting process.
+
+\firstpage{1}
+\maketitle
+
+\begin{abstract}
+Resuspension of volcanic ash from a deposit in Iceland is modeled with HYSPLIT driven by meteorological
+fields from the ECMWF ERA5 dataset as well as WRF. The source term for the resuspended ash is assumed to be
+a function of friction velocity provided by numerical weather prediction model. 
+Overall, timing of resuspension events can be predicted well.
+\end{abstract}
+
+\copyrightstatement{TEXT}
+
+%----------------------------------------------
+%\introduction  %% \introduction[modified heading if necessary]
+
+\input{intro}
+
+%----------------------------------------------
+\section{Measurements}
+\label{sec:measurements}
+\input{measurements}
+
+%----------------------------------------------
+\section{Method}
+In this section, we describe the Lagrangian transport and dispersion  model, HYSPLIT, the meteorological data sets used as input into HYSPLIT.
+
+\input{nwp}
+\input{method}
+%subsection NWP model
+%subsection Modeling Transport
+%subsection Modeling Emissions
+%subsection Particle Size Distribution
+%subsection Transport differences
+%subsection Drag Partition Correction
+%subsection Sensitivity Analysis
+
+%----------------------------------------------
+%\section{Results}
+\input{results}
+
+
+
+%% The following commands are for the statements about the availability of data sets and/or software code corresponding to the manuscript.
+%% It is strongly recommended to make use of these sections in case data sets and/or software code have been part of your research the article is based on.
+
+%\codeavailability{TEXT} %% use this section when having only software code available
+
+
+%\dataavailability{TEXT} %% use this section when having only data sets available
+
+
+%\codedataavailability{TEXT} %% use this section when having data sets and software code available
+
+
+
+
+
+%\appendix
+%\section{}    %% Appendix A
+
+%\subsection{}     %% Appendix A1, A2, etc.
+
+
+%\noappendix       %% use this to mark the end of the appendix section
+
+%% Regarding figures and tables in appendices, the following two options are possible depending on your general handling of figures and tables in the manuscript environment:
+
+%% Option 1: If you sorted all figures and tables into the sections of the text, please also sort the appendix figures and appendix tables into the respective appendix sections.
+%% They will be correctly named automatically.
+
+%% Option 2: If you put all figures after the reference list, please insert appendix tables and figures after the normal tables and figures.
+%% To rename them correctly to A1, A2, etc., please add the following commands in front of them:
+
+%\appendixfigures  %% needs to be added in front of appendix figures
+
+%\appendixtables   %% needs to be added in front of appendix tables
+
+%% Please add \clearpage between each table and/or figure. Further guidelines on figures and tables can be found below.
+
+
+
+%\authorcontribution{TEXT} %% optional section
+%
+%\competinginterests{TEXT} %% this section is mandatory even if you declare that no competing interests are present
+
+%\disclaimer{TEXT} %% optional section
+
+%\begin{acknowledgements}
+%TEXT
+%\end{acknowledgements}
+
+
+
+
+%% REFERENCES
+
+\bibliography{esp,resuspension2}{}
+\bibliographystyle{agufull08}
+
+%% The reference list is compiled as follows:
+
+%\begin{thebibliography}{}
+
+%\bibitem[AUTHOR(YEAR)]{LABEL}
+%REFERENCE 1
+
+%\bibitem[AUTHOR(YEAR)]{LABEL}
+%REFERENCE 2
+
+%\end{thebibliography}
+
+%% Since the Copernicus LaTeX package includes the BibTeX style file copernicus.bst,
+%% authors experienced with BibTeX only have to include the following two lines:
+%%
+%% \bibliographystyle{copernicus}
+%% \bibliography{example.bib}
+%%
+%% URLs and DOIs can be entered in your BibTeX file as:
+%%
+%% URL = {http://www.xyz.org/~jones/idx_g.htm}
+%% DOI = {10.5194/xyz}
+
+
+%% LITERATURE CITATIONS
+%%
+%% command                        & example result
+%% \citet{jones90}|               & Jones et al. (1990)
+%% \citep{jones90}|               & (Jones et al., 1990)
+%% \citep{jones90,jones93}|       & (Jones et al., 1990, 1993)
+%% \citep[p.~32]{jones90}|        & (Jones et al., 1990, p.~32)
+%% \citep[e.g.,][]{jones90}|      & (e.g., Jones et al., 1990)
+%% \citep[e.g.,][p.~32]{jones90}| & (e.g., Jones et al., 1990, p.~32)
+%% \citeauthor{jones90}|          & Jones et al.
+%% \citeyear{jones90}|            & 1990
+
+
+
+%% FIGURES
+
+%% When figures and tables are placed at the end of the MS (article in one-column style), please add \clearpage
+%% between bibliography and first table and/or figure as well as between each table and/or figure.
+
+% ONE-COLUMN FIGURES
+%plot_locations.py
+\begin{figure}[t]
+\includegraphics[width=15cm]{locations.png}
+\caption{Location of measurements sites (green squares), Eyjafjalloj\"{o}kull (black triangle), and HYSPLIT sources (ERA5 red diamonds, WRF 27km Blue diamonds, WRF 9km cyan circles}
+\label{fig:sources}
+\end{figure}
+%o
+%plot_obs.py
+\begin{figure}[p]
+\includegraphics[width=10cm]{obs.pdf}
+\caption{Measurements at each location. Letters are placed at the same time to indicate times at which elevated PM$_{10}$ levels
+were measured at one or more locations.}
+\label{fig:obs}
+\end{figure}
+%
+%plot_zo.py
+\begin{figure}[p]
+\includegraphics[width=10cm]{uhist.pdf}
+\caption{Joint histograms of friction velocity and ten meter wind speed for (a)ERA5, (b)WRF 27km, (c) WRF 9km, (d) WRF 3km,
+with individual histograms located along the axis.
+The solid lines show law of the wall relationships with surface roughness values of $z_o=$0.068cm (blue), 4.7cm(black), 10cm (red), and 50cm(green). The solid lines are the same in each graph. }
+\label{fig:uhist}
+\end{figure}
+%
+%plot_ustar.py
+\begin{figure}[p]
+\includegraphics[width=10cm]{ustar_ut.pdf}
+\caption{Friction velocity and 10m wind speeds as a function of time for (a)ERA5 over land, (b)ERA5 over ocean,
+(c)WRF 27km, (d) WRF 9 km. The horizontal line is drawn at 30~cm~s$^{-1}$. The capital letters are placed at the same times as
+those in Figure~\ref{fig:obs}.}
+\label{fig:ustar_time}
+\end{figure}
+
+%plot_westphal.py
+\begin{figure}[p]
+\includegraphics[width=16cm]{westphal.pdf}
+%\caption{Forecast at each location. Scale and letter placement is the same as in Figure~\ref{fig:obs}. Panels on the
+%left show forecast in $\mu\mathrm{g}\;\mathrm{m}^{-3}$ with emissions estimated using the Westphal relationship. Panels
+%on the right show forecast in arbitrary units assuming constant emissions for $u_*>5 \mathrm{cm}\;\mathrm{s^{-1}$.}
+\label{fig:westphal}
+\end{figure}
+%
+
+
+
+
+
+%%f
+%\begin{figure}[t]
+%\includegraphics[width=16cm]{FILE NAME}
+%\caption{TEXT}
+%\end{figure}
+%
+%%% TWO-COLUMN FIGURES
+%
+%%f
+%\begin{figure*}[t]
+%\includegraphics[width=12cm]{FILE NAME}
+%\caption{TEXT}
+%\end{figure*}
+%
+%
+%%% TABLES
+%%%
+%%% The different columns must be seperated with a & command and should
+%%% end with \\ to identify the column brake.
+%
+%%% ONE-COLUMN TABLE
+%
+%%t
+%\begin{table}[t]
+%\caption{TEXT}
+%\begin{tabular}{column = lcr}
+%\tophline
+%
+%\middlehline
+%
+%\bottomhline
+%\end{tabular}
+%\belowtable{} % Table Footnotes
+%\end{table}
+%
+%%% TWO-COLUMN TABLE
+%
+%%t
+%\begin{table*}[t]
+%\caption{TEXT}
+%\begin{tabular}{column = lcr}
+%\tophline
+%
+%\middlehline
+%
+%\bottomhline
+%\end{tabular}
+%\belowtable{} % Table Footnotes
+%\end{table*}
+%
+%
+%%% MATHEMATICAL EXPRESSIONS
+%
+%%% All papers typeset by Copernicus Publications follow the math typesetting regulations
+%%% given by the IUPAC Green Book (IUPAC: Quantities, Units and Symbols in Physical Chemistry,
+%%% 2nd Edn., Blackwell Science, available at: http://old.iupac.org/publications/books/gbook/green_book_2ed.pdf, 1993).
+%%%
+%%% Physical quantities/variables are typeset in italic font (t for time, T for Temperature)
+%%% Indices which are not defined are typeset in italic font (x, y, z, a, b, c)
+%%% Items/objects which are defined are typeset in roman font (Car A, Car B)
+%%% Descriptions/specifications which are defined by itself are typeset in roman font (abs, rel, ref, tot, net, ice)
+%%% Abbreviations from 2 letters are typeset in roman font (RH, LAI)
+%%% Vectors are identified in bold italic font using \vec{x}
+%%% Matrices are identified in bold roman font
+%%% Multiplication signs are typeset using the LaTeX commands \times (for vector products, grids, and exponential notations) or \cdot
+%%% The character * should not be applied as mutliplication sign
+%
+%
+%%% EQUATIONS
+%
+%%% Single-row equation
+%
+%\begin{equation}
+%
+%\end{equation}
+%
+%%% Multiline equation
+%
+%\begin{align}
+%& 3 + 5 = 8\\
+%& 3 + 5 = 8\\
+%& 3 + 5 = 8
+%\end{align}
+%
+%
+%%% MATRICES
+%
+%\begin{matrix}
+%x & y & z\\
+%x & y & z\\
+%x & y & z\\
+%\end{matrix}
+%
+%
+%%% ALGORITHM
+%
+%\begin{algorithm}
+%\caption{…}
+%\label{a1}
+%\begin{algorithmic}
+%…
+%\end{algorithmic}
+%\end{algorithm}
+%
+%
+%%% CHEMICAL FORMULAS AND REACTIONS
+%
+%%% For formulas embedded in the text, please use \chem{}
+%
+%%% The reaction environment creates labels including the letter R, i.e. (R1), (R2), etc.
+%
+%\begin{reaction}
+%%% \rightarrow should be used for normal (one-way) chemical reactions
+%%% \rightleftharpoons should be used for equilibria
+%%% \leftrightarrow should be used for resonance structures
+%\end{reaction}
+%
+%
+%%% PHYSICAL UNITS
+%%%
+%%% Please use \unit{} and apply the exponential notation
+
+
+\end{document}

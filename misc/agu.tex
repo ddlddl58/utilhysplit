@@ -1,0 +1,130 @@
+%% Copernicus Publications Manuscript Preparation Template for LaTeX Submissions
+%% ---------------------------------
+%% This template should be used for copernicus.cls
+%% The class file and some style files are bundled in the Copernicus Latex Package, which can be downloaded from the different journal webpages.
+%% For further assistance please contact Copernicus Publications at: production@copernicus.org
+%% https://publications.copernicus.org/for_authors/manuscript_preparation.html
+
+
+%% Please use the following documentclass and journal abbreviations for discussion papers and final revised papers.
+
+
+%% 2-column papers and discussion papers
+\documentclass[acp, manuscript]{copernicus}
+
+%% Journal abbreviations (please use the same for discussion papers and final revised papers)
+
+% Archives Animal Breeding (aab)
+% Atmospheric Chemistry and Physics (acp)
+% Advances in Geosciences (adgeo)
+% Advances in Statistical Climatology, Meteorology and Oceanography (ascmo)
+% Annales Geophysicae (angeo)
+% ASTRA Proceedings (ap)
+% Atmospheric Measurement Techniques (amt)
+% Advances in Radio Science (ars)
+% Advances in Science and Research (asr)
+% Biogeosciences (bg)
+% Climate of the Past (cp)
+% Drinking Water Engineering and Science (dwes)
+% Earth System Dynamics (esd)
+% Earth Surface Dynamics (esurf)
+% Earth System Science Data (essd)
+% Fossil Record (fr)
+% Geographica Helvetica (gh)
+% Geoscientific Instrumentation, Methods and Data Systems (gi)
+% Geoscientific Model Development (gmd)
+% Hydrology and Earth System Sciences (hess)
+% History of Geo- and Space Sciences (hgss)
+% Journal of Micropalaeontology (jm)
+% Journal of Sensors and Sensor Systems (jsss)
+% Mechanical Sciences (ms)
+% Natural Hazards and Earth System Sciences (nhess)
+% Nonlinear Processes in Geophysics (npg)
+% Ocean Science (os)
+% Proceedings of the International Association of Hydrological Sciences (piahs)
+% Primate Biology (pb)
+% Scientific Drilling (sd)
+% SOIL (soil)
+% Solid Earth (se)
+% The Cryosphere (tc)
+% Web Ecology (we)
+% Wind Energy Science (wes)
+
+
+%% \usepackage commands included in the copernicus.cls:
+%\usepackage[german, english]{babel}
+%\usepackage{tabularx}
+%\usepackage{cancel}
+%\usepackage{multirow}
+%\usepackage{supertabular}
+%\usepackage{algorithmic}
+%\usepackage{algorithm}
+%\usepackage{amsthm}
+%\usepackage{float}
+%\usepackage{subfig}
+%\usepackage{rotating}
+
+
+\begin{document}
+
+\title{Modeling the transport and dispersion of resuspended volcanic ash. }
+
+
+% \Author[affil]{given_name}{surname}
+
+\Author[]{Alice}{Crawford}
+\Author[]{Christopher}{Loughner}
+\Author[]{Tianfeng}{Chai}
+\Author[]{Ariel}{Stein}
+
+\affil[]{NOAA ARL}
+\affil[]{ADDRESS}
+
+%% The [] brackets identify the author with the corresponding affiliation. 1, 2, 3, etc. should be inserted.
+
+\runningtitle{Resuspended volcanic ash}
+
+\runningauthor{TEXT}
+
+\correspondence{NAME (EMAIL)}
+
+\received{}
+\pubdiscuss{} %% only important for two-stage journals
+\revised{}
+\accepted{}
+\published{}
+
+%% These dates will be inserted by Copernicus Publications during the typesetting process.
+
+\firstpage{1}
+\maketitle
+
+\begin{abstract}
+
+Volcanic ash may resuspend from ground deposits and resulting concentrations may be high enough to impact human health, aviation, and ventilation systems.
+Atmospheric transport and dispersion models, ATDMs, have been used to predict concentrations of resuspended volcanic ash in locations which are at risk of such events.
+The modeling approach is similar to that for dust storms. Resuspension due to transfer of momentum from the atmosphere to the deposit is modeled. 
+Emissions are estimated to be a function of the friction velocity which is supplied by a numerical weather prediciton, NWP, model which is also used
+to drive the ATDM. 
+Usually detailed information about the deposit such as
+grain size distribtuion, depth, and soil moisture are not available and furthermore may change over time.
+Consequently the dependence of emissions on deposit properties is through an empirical constant which may be estimated by scaling model results to measurements.
+The spatial and time resolution of the NWP data is expected to be important as resuspension depends on very local conditions. 
+We model the resuspension of volcanic ash from a deposit with the HYSPLIT model driven with meteorological fields from the ECMWF ERA5 dataset as well as the weather research and forecasting, WRF, model, at three different spatial resolutions (27 km, 9 km and 3 km). 
+Model forecasts are compared to PM10 measurements at four stations during the time period after the 2010 eruption of Eyjaf. 
+The sensitivity of the forecast to NPW model resolution, the form of the emission strength function,
+and HYSPLIT concentration grid resolution is investigated. 
+
+
+
+\end{abstract}
+
+Interpolating ustar
+
+To obtain values of friction velocity between NWP output grid points several assumptions must be made.
+
+Values of friction velocity between NWP output grid points cannot be simply interpolated to obtain values 
+
+
+
+\end{document}
